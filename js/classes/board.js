@@ -5,6 +5,8 @@ class Board extends Phaser.GameObjects.Container
         super(config.scene)
         this.scene = config.scene;
         this.graphics = graphics;
+        this.currentLane;
+       
         this.center = null;
         this.shape = [
             [
@@ -80,7 +82,7 @@ class Board extends Phaser.GameObjects.Container
       }
 
       drawOccupiedLane(occupiedLane , color ) {
-        
+        this.currentLane = occupiedLane;
         //TODO: find better logic for this method
 
           for (let i = 0; i < this.Lanes.length; i++) {
@@ -111,5 +113,14 @@ class Board extends Phaser.GameObjects.Container
           this.graphics.closePath();
           this.graphics.strokePath();
 
+      }
+
+
+      clearBoard()
+      {
+        this.graphics.lineStyle(0x000000);
+        this.graphics.fillStyle(0x000000);
+        this.graphics.fillRect(0, 0, game.config.width, game.config.height);
+        this.graphics.strokeRect(0, 0, game.config.width, game.config.height);
       }
 }
