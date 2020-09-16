@@ -66,7 +66,7 @@ class Board extends Phaser.GameObjects.Container
     }
 
     drawLanes() {
-        this.graphics.lineStyle(4, 0xff0000);
+        this.graphics.lineStyle(1, 0x0000ff);
     
         for (let i = 0; i < this.Lanes.length; i++) {
           const Lane = this.Lanes[i];
@@ -83,26 +83,8 @@ class Board extends Phaser.GameObjects.Container
 
       drawOccupiedLane(occupiedLane , color ) {
         this.currentLane = occupiedLane;
-        //TODO: find better logic for this method
 
-          for (let i = 0; i < this.Lanes.length; i++) {
-            const lane = this.Lanes[i];
-
-            if (occupiedLane != lane)
-            {
-                this.graphics.lineStyle(4, 0xff0000);
-                this.graphics.beginPath();
-                
-                this.graphics.moveTo(...lane[0]);
-                this.graphics.lineTo(...lane[1]);
-                this.graphics.lineTo(...lane[2]);
-                this.graphics.lineTo(...lane[3]);
-                this.graphics.closePath();
-                this.graphics.strokePath();
-            }
-          }
-
-          this.graphics.lineStyle(4, color);
+          this.graphics.lineStyle(1, color);
 
         this.graphics.beginPath();
           

@@ -1,11 +1,15 @@
 class Shooter extends Phaser.GameObjects.Container
 {
-    constructor(config, graphics)
+    constructor(config, graphics, emitter)
     {
         super(config.scene)
+        this.config = config;
+        this.emitter = emitter;
         this.graphics = graphics;
         //might need to determine this a different way
          this.positionX = 0;
+         this.bullets = [];
+         this.MAX_BULLETS = 8;
 
          this.scene.add.existing(this);
         
@@ -13,6 +17,8 @@ class Shooter extends Phaser.GameObjects.Container
 
     draw(Lane, color)
       {
+        this.currentLane = Lane;
+        //this is to draw the shooter but wonder if we used a sprite if we would even need this
         const posRimFlexible = Util.weightedMidpoint(Lane[0], Lane[1],  1 / 8);
         const posRimLeft = Util.weightedMidpoint(Lane[0], Lane[1], 0.9);
         const posRimMidLeft = Util.weightedMidpoint(Lane[0], Lane[1], 0.6);
@@ -25,7 +31,7 @@ class Shooter extends Phaser.GameObjects.Container
         const posClawPointRight = Util.addVector(posRimMidRight, toClawBack, -1);
 
     
-        this.graphics.lineStyle(4, color);
+        this.graphics.lineStyle(3, color);
 
         this.graphics.beginPath();
         this.graphics.moveTo(...Lane[0]);
@@ -38,5 +44,11 @@ class Shooter extends Phaser.GameObjects.Container
         this.graphics.lineTo(...posClawPointRight);
         this.graphics.closePath();
         this.graphics.strokePath();
+      }
+
+      fire(Lane, physics) {
+          const bullet = new Bullet(this.config, this.graphics, physics, Lane ? Lane : this.currentLane );
+       // bullet.draw(Lane);
+        return bullet;
       }
 }

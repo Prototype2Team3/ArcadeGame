@@ -83,4 +83,8 @@ class Util
         const y = (y2 - y1) / Util.distanceBetweenPoints(point1, point2) * scalar;
         return [y, -x];
       }
+
+      static travelOutLane(fraction) {
+        return 1 - Math.pow(fraction - 1, 2);
+      }
 }
