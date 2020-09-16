@@ -8,6 +8,9 @@ class SceneMain extends Phaser.Scene {
     }
     create() {
         //Define objects
+        var board = new Board({scene:this}, this.add.graphics());
+        board.defineTubes();
+        board.drawTubeQuads();
     }
     update() {
         //Constant running loop
