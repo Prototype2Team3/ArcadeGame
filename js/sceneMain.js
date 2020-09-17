@@ -43,6 +43,14 @@ class SceneMain extends Phaser.Scene {
         //Constant running loop
         this.board.clearBoard();
         this.movePointer();
+        this.drawBullets();
+
+    }
+
+    drawBullets()
+    {
+      if (this.bullets.length > 0)
+      {
         this.bullets.forEach(element => {
           element.draw(this.board.currentLane);
           if (element.move())
@@ -55,6 +63,8 @@ class SceneMain extends Phaser.Scene {
             element = null;
           }
         });
+
+      }
 
     }
 
