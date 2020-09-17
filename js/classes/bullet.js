@@ -15,7 +15,7 @@ class Bullet extends Phaser.GameObjects.Container
 
 
         //this.graphics.lineStyle(8, 0xff0000);
-        this.graphics.fillStyle(0xff0000, 1.0);
+        this.graphics.fillStyle(0xffffff, 1.0);
         this.graphics.beginPath();
         const start = Util.midpoint(this.Lane[0], this.Lane[1]);
         const end = Util.midpoint(this.Lane[2], this.Lane[3]);
@@ -40,7 +40,7 @@ class Bullet extends Phaser.GameObjects.Container
         this.zPos += 3;
         if (this.zPos > 120) 
         {
-            this.destroy();
+          this.destroy();
           return false;
         }
 

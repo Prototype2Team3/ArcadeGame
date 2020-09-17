@@ -87,4 +87,43 @@ class Util
       static travelOutLane(fraction) {
         return 1 - Math.pow(fraction - 1, 2);
       }
+
+      static weightedMidpoint(point1, point2, weight) {
+        const x1 = point1[0];
+        const y1 = point1[1];
+        const x2 = point2[0];
+        const y2 = point2[1];
+        return [x1 * (1 - weight) + x2 * weight, y1 * (1 - weight) + y2 * weight];
+      }
+
+      static laneCenter(shape) {
+        let x = shape[1][0][0];
+        let y = shape[1][0][1];
+        for (let i = 1; i < shape[1].length - 1; i++) {
+          x += shape[1][i][0];
+          y += shape[1][i][1];
+        }
+        x /= shape[1].length - 1;
+        y /= shape[1].length - 1;
+        return [x, y];
+      }
+
+      static theta(point1, point2, point3) {
+        const a = Util.distanceBetweenPoints(point1, point2);
+        const b = Util.distanceBetweenPoints(point2, point3);
+        const c = Util.distanceBetweenPoints(point1, point3);
+        const numerator = Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2);
+        const denominator = 2 * a * b;
+        return Math.acos(numerator/denominator);
+      }
+
+      static  rotateAroundPoint(point1, point2, angle) {
+        const x1 = point1[0];
+        const y1 = point1[1];
+        const x2 = point2[0];
+        const y2 = point2[1];
+        const x = (x1 - x2) * Math.cos(angle) - (y1 - y2) * Math.sin(angle) + x2;
+        const y = (x1 - x2) * Math.sin(angle) + (y1 - y2) * Math.cos(angle) + y2;
+        return [x, y];
+      }
 }

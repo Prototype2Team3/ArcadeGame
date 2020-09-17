@@ -49,6 +49,8 @@ class Board extends Phaser.GameObjects.Container
             ]
           ];
 
+          this.laneCenter = Util.laneCenter(this.shape);
+
         this.scene.add.existing(this);
     }
 

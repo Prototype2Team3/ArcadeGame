@@ -2,12 +2,14 @@ class SceneMain extends Phaser.Scene {
     constructor() {
         super('SceneMain');
         this.bullets = [];
+        this.enemies = [];
     }
     preload()
     {
       //Load Images or Sounds here
       this.load.image("bullet", "images/bullet.png");
     }
+
     create() {
         //Define objects
         emitter = new Phaser.Events.EventEmitter();
@@ -20,9 +22,9 @@ class SceneMain extends Phaser.Scene {
         this.board.drawLanes();
         //add physics
         //this.bulletGroup = this.physics.add.group();
-
-
-        this.e = this.events;
+       
+        this.enemy = new Enemy({scene:this}, this.graphics, this.board.Lanes);
+        
 
         this.input.mouse.capture = true;
 
@@ -44,6 +46,7 @@ class SceneMain extends Phaser.Scene {
         this.board.clearBoard();
         this.movePointer();
         this.drawBullets();
+        this.enemy.draw(this.graphics, this.board.laneCenter);
 
     }
 
