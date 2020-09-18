@@ -29,7 +29,7 @@ class Grid
 
     show()
     {
-        this.points = [];
+        this.points = new Array();
 
         var n = 16;
         var w = 360 / n;
@@ -48,7 +48,7 @@ class Grid
             var x =center[0] + (r * Math.sin(Math.PI * 2 * theta/360));
             var y = center[1] + (r * Math.cos(Math.PI * 2 * theta/360));
 
-            this.points.push([x,y]);
+            this.points.push(new Array(x,y));
             this.graphics.lineTo(x,y);
         }
 
@@ -58,12 +58,16 @@ class Grid
 
     movePositions()
     {
-        var positions = [];
+        var positions = new Array;
 
         for (let i = 0; i < this.points.length - 1; i++) {
-            positions.push([
-              Util.midpoint(this.points[i],this.points[i + 1])
-            ]);
+            
+              var point = Util.midpoint(this.points[i],this.points[i + 1]);
+              var x = point[0];
+              var y = point[1];
+
+              positions.push({X: x, Y:y})
+           
           }
 
           return positions;
