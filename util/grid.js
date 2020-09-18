@@ -33,7 +33,7 @@ class Grid
 
         var n = 16;
         var w = 360 / n;
-        var i =1;
+        var i =0;
         var theta = i * w;
         var r =  400;
         
@@ -48,7 +48,7 @@ class Grid
             var x =center[0] + (r * Math.sin(Math.PI * 2 * theta/360));
             var y = center[1] + (r * Math.cos(Math.PI * 2 * theta/360));
 
-            this.points.push(new Array(x,y));
+            this.points.push([x,y]);
             this.graphics.lineTo(x,y);
         }
 
@@ -69,6 +69,7 @@ class Grid
               positions.push({X: x, Y:y})
            
           }
+          console.log("positions ", positions)
 
           return positions;
 
