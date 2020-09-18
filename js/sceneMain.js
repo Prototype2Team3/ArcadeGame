@@ -4,7 +4,9 @@ class SceneMain extends Phaser.Scene {
     }
     preload()
     {
-    	//Load Images or Sounds here
+        //Load Images or Sounds here
+        this.load.image("character", "images/img.png");
+        this.load.image("items", "images/img.png");
     }
     create() {
         //Define objects
@@ -23,11 +25,32 @@ class SceneMain extends Phaser.Scene {
         this.positions = alignGrid.movePositions();
 
         //character set up
-        this.character = this.physics.add.sprite(this.positions[0].X, this.positions[0].Y, 'images/bullet');
+        this.character = this.physics.add.sprite(this.positions[0].X, this.positions[0].Y, 'character');
         this.positionIndex = 0;
         this.moveCounter = 0;
         cursors = this.input.keyboard.createCursorKeys();
+		this.actionButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
+        //******AI set up a group for items thrown *****************************************************************************//
+        this.itemGroup= this.physics.add.group({
+            key: 'items',
+            frame: [0,1,2],
+            frameQuantity: 4,
+            collideWorldBounds: false
+        });
+        this.itemGroup.children.iterate(function(child){
+         child.x = this.centerX;
+         child.y = this.centerY;
+         var msTimeTravel = 4000;
+         var randomIdx = Math.floor(Math.random() * 16)
+
+         child.setScale(0.5)
+         this.physics.moveTo(child, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
+
+        }.bind(this));
+        //set up a collider 
+        this.physics.add.overlap(this.character, this.itemGroup, this.handleCollision, null, this);
+/*********************************************************************************************************************** */
     }
 
     update() {
@@ -53,10 +76,17 @@ class SceneMain extends Phaser.Scene {
         }
     }
 
+    handleCollision(character,item)
+    {
+        //TODO: in here handle what happens when item ovelaps with player
+     
+        item.destroy();
+    }
+
     canMove(){
         if(this.moveCounter <= 0)
         {
-            this.moveCounter = 10;
+            this.moveCounter = 8;
             return true;
         }
         this.moveCounter--;
