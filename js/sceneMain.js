@@ -48,8 +48,8 @@ class SceneMain extends Phaser.Scene {
         {
             this.positionIndex < this.positions.length - 1? this.positionIndex++ : this.positionIndex = 0;
         }
-        this.character.body.position.x = this.positions[this.positionIndex].X;
-        this.character.body.position.y = this.positions[this.positionIndex].Y;
+        this.character.body.position.x = this.positions[this.positionIndex].X - this.character.body.width/2;
+        this.character.body.position.y = this.positions[this.positionIndex].Y - this.character.body.height/2 ;
         }
     }
 

@@ -69,7 +69,6 @@ class Grid
               positions.push({X: x, Y:y})
            
           }
-          console.log("positions ", positions)
 
           return positions;
 
