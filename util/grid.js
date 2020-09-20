@@ -38,7 +38,7 @@ class Grid
         var r =  300;
         
         this.graphics = this.scene.add.graphics();
-        this.graphics.lineStyle(1, 0xff0000);
+        this.graphics.lineStyle(0, 0xff0000);
 
         var center = [this.config.width/2, this.config.height/2];
         for (var index = i; index <= n; index++)

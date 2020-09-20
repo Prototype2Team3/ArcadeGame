@@ -1,6 +1,6 @@
 class Align{
     static scaletoGame(obj , percentage) {
-        obj.displayWidth = game.config.with * percentage;
+        obj.displayWidth = game.config.width * percentage;
         obj.scaleY = obj.scaleX;
     }
 
