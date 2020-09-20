@@ -8,10 +8,35 @@ class SceneMain extends Phaser.Scene {
         this.load.image("character", "images/img.png");
         this.load.image("items", "images/img.png");
     }
+
+    getTime() {
+        //make a new date object
+        let d = new Date();
+
+        //return the number of milliseconds since 1 January 1970 00:00:00.
+        return d.getTime();
+    }
+
+    showDelta() {
+        //subtract the start time from the time now
+        
+        let elapsed = this.getTime()-this.start;
+
+        //log the result
+        console.log("delta time=" + elapsed);
+
+        //reset the start time
+        this.start = this.getTime();
+    }
+
     create() {
         //Define objects
         emitter = new Phaser.Events.EventEmitter();
         controller = new Controller();
+        this.start = this.getTime();
+
+        //add a listener for when the screen is clicked
+        this.input.on('pointerdown',this.showDelta.bind(this));
 
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
@@ -29,7 +54,9 @@ class SceneMain extends Phaser.Scene {
         this.positionIndex = 0;
         this.moveCounter = 0;
         cursors = this.input.keyboard.createCursorKeys();
-		this.actionButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.actionButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.leftPressed = false;
+        this.rightPressed = false;
 
         //******AI set up a group for items thrown *****************************************************************************//
         this.itemGroup= this.physics.add.group({
@@ -61,36 +88,50 @@ class SceneMain extends Phaser.Scene {
     handlePlayerInput()
     {
 
-    if(this.canMove())
-    {
-        if (cursors.left.isDown)
+    //if(this.canMove())
+    //{
+        if (cursors.left.isDown && this.leftPressed == false)
         {
-            this.positionIndex > 0? this.positionIndex-- : this.positionIndex = this.positions.length - 1;
+            this.leftPressed = true;
+            this.downtime=this.getTime();
+           this.positionIndex > 0? this.positionIndex-- : this.positionIndex = this.positions.length - 1;
         }
-        else if (cursors.right.isDown)
+        else if (cursors.right.isDown && this.rightPressed == false)
         {
+            this.rightPressed = true;
+            this.downtime=this.getTime();
             this.positionIndex < this.positions.length - 1? this.positionIndex++ : this.positionIndex = 0;
         }
+        
+        if ( !cursors.left.isDown && this.leftPressed == true)
+        {
+            this.leftPressed = false;
+            
+        }
+
+        if ( !cursors.left.isDown && this.rightPressed == true)
+        {
+            this.leftPressed = false;
+            
+        }
+
+        var elapsed = Math.abs(this.downtime - this.getTime());
+        if(elapsed > 60)
+        {
+    
+            this.leftPressed = false;
+            this.rightPressed = false;
+        }
+
         this.character.body.position.x = this.positions[this.positionIndex].X - this.character.body.width/2;
         this.character.body.position.y = this.positions[this.positionIndex].Y - this.character.body.height/2 ;
         }
-    }
+   // }
 
     handleCollision(character,item)
     {
         //TODO: in here handle what happens when item ovelaps with player
      
         item.destroy();
-    }
-
-    canMove(){
-        if(this.moveCounter <= 0)
-        {
-            this.moveCounter = 3;
-            return true;
-        }
-        this.moveCounter--;
-
-        return false;
     }
 }
