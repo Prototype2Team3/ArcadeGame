@@ -4,7 +4,6 @@ var emitter;
 var controller;
 var cursors;
 var G;
-var items;
 window.onload=function()
 {
     var config = {

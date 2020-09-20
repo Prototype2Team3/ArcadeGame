@@ -44,7 +44,7 @@ class SceneMain extends Phaser.Scene {
         this.leftPressed = false;
         this.rightPressed = false;
 
-        items = this.add.group();
+        this.items = [];
         this.time.addEvent({ delay: 1000, callback: this.handleItemCreation, callbackScope: this, loop: true });
 
     }
@@ -52,11 +52,12 @@ class SceneMain extends Phaser.Scene {
     update() {
         //Constant running loop
         this.handlePlayerInput();
+        this.handleObjectDestruction();
     }
 
     handleItemCreation()
     {
-        var msTimeTravel = 2000;
+        var msTimeTravel = 3000;
         var randomIdx = Math.floor(Math.random() * 16)
         var sprites = ['chair', 'table', 'tv'];
         var randItem = Math.floor(Math.random() * sprites.length);
@@ -64,6 +65,8 @@ class SceneMain extends Phaser.Scene {
         item.setScale(0.83);
         this.physics.moveTo(item, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
         this.physics.add.overlap(this.character, item , this.handleCollision, null, this);
+
+        this.items.push(item);
 
     }
 
@@ -110,7 +113,38 @@ class SceneMain extends Phaser.Scene {
     handleCollision(character,item)
     {
         //TODO: in here handle what happens when item ovelaps with player
+   
+        for(var i = 0; i < this.items.length; i++)
+        {
+           if(this.items[i] == item)
+           {
+               this.items.slice(this.items[i]);
+           }
+           
+        }
+       //item.destroy();
+       item.disableBody(true, true);
+    }
+
+    handleObjectDestruction()
+    {
+ 
+        var r = 300;
+        for(var i = 0; i < this.items.length; i++)
+        {
+           
+            var d = Util.distanceTraveled([this.centerX, this.centerY], [this.items[i].body.position.x, this.items[i].body.position.y]);
+            if ( d > r)
+            {
+                var item = this.items[i];
+                this.items.slice(this.items[i]);
+
+                item.disableBody(true, true);
+
+                
+
+            }
+        }
      
-        item.destroy();
     }
 }
