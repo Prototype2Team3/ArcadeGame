@@ -10,5 +10,12 @@ class ScoreBox extends Phaser.GameObjects.Container
         this.add(this.text1);
 
         this.scene.add.existing(this);
+
+        emitter.on(G.SCORE_UPDATED, this.scoreUpdated, this);
+    }
+    
+    scoreUpdated()
+    {
+        this.text1.setText("Score:" + model.score);
     }
 }

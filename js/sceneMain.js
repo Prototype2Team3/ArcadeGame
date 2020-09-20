@@ -24,12 +24,16 @@ class SceneMain extends Phaser.Scene {
         //Define objects
         emitter = new Phaser.Events.EventEmitter();
         controller = new Controller();
+        model.score = 0;
 
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
 
         this.background = this.add.image(0,0, 'background');
         this.background.setOrigin(0,0);
+        this.sb = new ScoreBox({scene:this});
+        this.sb.x = game.config.width/2;
+        this.sb.y = 50;
         var gridConfig={scene:this}
         var alignGrid = new Grid(gridConfig);
         alignGrid.show();
@@ -122,28 +126,33 @@ class SceneMain extends Phaser.Scene {
            }
            
         }
-       //item.destroy();
+       
        item.disableBody(true, true);
+       emitter.emit(G.UP_POINTS, 1);
+       
     }
 
     handleObjectDestruction()
     {
  
         var r = 300;
+        var missedObject = false;
         for(var i = 0; i < this.items.length; i++)
         {
-           
+           if(this.items[i].body)
+           {
             var d = Util.distanceTraveled([this.centerX, this.centerY], [this.items[i].body.position.x, this.items[i].body.position.y]);
             if ( d > r)
             {
                 var item = this.items[i];
                 this.items.slice(this.items[i]);
 
-                item.disableBody(true, true);
-
-                
+                emitter.emit(G.DOWN_POINTS, 3);
+                item.destroy();
 
             }
+           }
+           
         }
      
     }
