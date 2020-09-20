@@ -35,7 +35,7 @@ class Grid
         var w = 360 / n;
         var i =0;
         var theta = i * w;
-        var r =  400;
+        var r =  300;
         
         this.graphics = this.scene.add.graphics();
         this.graphics.lineStyle(1, 0xff0000);

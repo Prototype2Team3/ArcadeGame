@@ -86,7 +86,7 @@ class SceneMain extends Phaser.Scene {
     canMove(){
         if(this.moveCounter <= 0)
         {
-            this.moveCounter = 8;
+            this.moveCounter = 3;
             return true;
         }
         this.moveCounter--;
