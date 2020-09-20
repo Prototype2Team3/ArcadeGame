@@ -5,8 +5,9 @@ class SceneMain extends Phaser.Scene {
     preload()
     {
         //Load Images or Sounds here
-        this.load.image("character", "images/img.png");
-        this.load.image("items", "images/img.png");
+        this.load.image("character", "images/character/front.png");
+        this.load.image("chairs", "images/furniture/chair.png");
+        this.load.image("background", "images/scene.png");
     }
 
     getTime() {
@@ -17,33 +18,16 @@ class SceneMain extends Phaser.Scene {
         return d.getTime();
     }
 
-    showDelta() {
-        //subtract the start time from the time now
-        
-        let elapsed = this.getTime()-this.start;
-
-        //log the result
-        console.log("delta time=" + elapsed);
-
-        //reset the start time
-        this.start = this.getTime();
-    }
-
     create() {
         //Define objects
         emitter = new Phaser.Events.EventEmitter();
         controller = new Controller();
-        this.start = this.getTime();
-
-        //add a listener for when the screen is clicked
-        this.input.on('pointerdown',this.showDelta.bind(this));
 
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
 
-
-        //this.background = this.add.image(0,0, 'images/background');
-        //this.background.setOrigin(0,0);
+        this.background = this.add.image(0,0, 'background');
+        this.background.setOrigin(0,0);
         var gridConfig={scene:this}
         var alignGrid = new Grid(gridConfig);
         alignGrid.show();
@@ -51,8 +35,8 @@ class SceneMain extends Phaser.Scene {
 
         //character set up
         this.character = this.physics.add.sprite(this.positions[0].X, this.positions[0].Y, 'character');
+        this.character.setScale(0.83);
         this.positionIndex = 0;
-        this.moveCounter = 0;
         cursors = this.input.keyboard.createCursorKeys();
         this.actionButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.leftPressed = false;
@@ -60,7 +44,7 @@ class SceneMain extends Phaser.Scene {
 
         //******AI set up a group for items thrown *****************************************************************************//
         this.itemGroup= this.physics.add.group({
-            key: 'items',
+            key: 'chairs',
             frame: [0,1,2],
             frameQuantity: 4,
             collideWorldBounds: false
@@ -88,8 +72,6 @@ class SceneMain extends Phaser.Scene {
     handlePlayerInput()
     {
 
-    //if(this.canMove())
-    //{
         if (cursors.left.isDown && this.leftPressed == false)
         {
             this.leftPressed = true;
@@ -125,8 +107,7 @@ class SceneMain extends Phaser.Scene {
 
         this.character.body.position.x = this.positions[this.positionIndex].X - this.character.body.width/2;
         this.character.body.position.y = this.positions[this.positionIndex].Y - this.character.body.height/2 ;
-        }
-   // }
+    }
 
     handleCollision(character,item)
     {
