@@ -29,11 +29,15 @@ class SceneMain extends Phaser.Scene {
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
 
-        this.background = this.add.image(0,0, 'background');
+        this.background = this.add.image(0,100, 'background');
         this.background.setOrigin(0,0);
+
+        //UI set up
         this.sb = new ScoreBox({scene:this});
-        this.sb.x = game.config.width/2;
+        this.sb.x = 100;
         this.sb.y = 50;
+
+        //grid set up
         var gridConfig={scene:this}
         var alignGrid = new Grid(gridConfig);
         alignGrid.show();
