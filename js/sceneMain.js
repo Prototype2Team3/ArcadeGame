@@ -6,7 +6,8 @@ class SceneMain extends Phaser.Scene {
     {
         //Load Images or Sounds here
         this.load.image("character", "images/character/front.png");
-        this.load.image("chairs", "images/furniture/chair.png");
+        this.load.image("chair", "images/furniture/chair.png");
+        this.load.image("table", "images/furniture/table.png");
         this.load.image("background", "images/scene.png");
     }
 
@@ -42,31 +43,27 @@ class SceneMain extends Phaser.Scene {
         this.leftPressed = false;
         this.rightPressed = false;
 
-        //******AI set up a group for items thrown *****************************************************************************//
-        this.itemGroup= this.physics.add.group({
-            key: 'chairs',
-            frame: [0,1,2],
-            frameQuantity: 4,
-            collideWorldBounds: false
-        });
-        this.itemGroup.children.iterate(function(child){
-         child.x = this.centerX;
-         child.y = this.centerY;
-         var msTimeTravel = 4000;
-         var randomIdx = Math.floor(Math.random() * 16)
+        items = this.add.group();
+        this.time.addEvent({ delay: 1000, callback: this.handleItemCreation, callbackScope: this, loop: true });
 
-         child.setScale(0.5)
-         this.physics.moveTo(child, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
-
-        }.bind(this));
-        //set up a collider 
-        this.physics.add.overlap(this.character, this.itemGroup, this.handleCollision, null, this);
-/*********************************************************************************************************************** */
     }
 
     update() {
         //Constant running loop
         this.handlePlayerInput();
+    }
+
+    handleItemCreation()
+    {
+        var msTimeTravel = 2000;
+        var randomIdx = Math.floor(Math.random() * 16)
+        var sprites = ['chair', 'table'];
+        var randItem = Math.floor(Math.random() * sprites.length);
+        var item = this.physics.add.sprite(this.centerX, this.centerY, sprites[randItem]);
+        item.setScale(0.83);
+        this.physics.moveTo(item, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
+        this.physics.add.overlap(this.character, item , this.handleCollision, null, this);
+
     }
 
     handlePlayerInput()
