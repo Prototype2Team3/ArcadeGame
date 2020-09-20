@@ -10,6 +10,7 @@ class SceneMain extends Phaser.Scene {
         this.load.image("table", "images/furniture/table.png");
         this.load.image("tv", "images/furniture/TV.png");
         this.load.image("background", "images/scene.png");
+        this.load.image("circle", "images/circle.png");
     }
 
     getTime() {
@@ -29,8 +30,10 @@ class SceneMain extends Phaser.Scene {
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
 
-        this.background = this.add.image(0,100, 'background');
+        this.background = this.add.image(0,0, 'background');
         this.background.setOrigin(0,0);
+
+        this.circle = this.add.image(this.centerX,this.centerY, 'circle');
 
         //UI set up
         this.sb = new ScoreBox({scene:this});
