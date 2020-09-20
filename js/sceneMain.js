@@ -8,6 +8,7 @@ class SceneMain extends Phaser.Scene {
         this.load.image("character", "images/character/front.png");
         this.load.image("chair", "images/furniture/chair.png");
         this.load.image("table", "images/furniture/table.png");
+        this.load.image("tv", "images/furniture/TV.png");
         this.load.image("background", "images/scene.png");
     }
 
@@ -57,7 +58,7 @@ class SceneMain extends Phaser.Scene {
     {
         var msTimeTravel = 2000;
         var randomIdx = Math.floor(Math.random() * 16)
-        var sprites = ['chair', 'table'];
+        var sprites = ['chair', 'table', 'tv'];
         var randItem = Math.floor(Math.random() * sprites.length);
         var item = this.physics.add.sprite(this.centerX, this.centerY, sprites[randItem]);
         item.setScale(0.83);
