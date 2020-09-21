@@ -7,6 +7,7 @@ class ScoreBox extends Phaser.GameObjects.Container
 
         this.progressBar = this.scene.add.graphics();
         this.progressBox = this.scene.add.graphics();
+        this.progressBar.lineStyle(2, 0x000000);
         this.progressBox.fillStyle(0x222222, 0.5);
         this.progressBox.fillRect(50, 50, 105, 25);
         this.text1 = this.scene.add.text(0,50, "Money Bar");
