@@ -6,5 +6,7 @@ class Constants
         this.UP_POINTS = "upPoints";
         this.DOWN_POINTS = "downPoints";
         this.SCORE_UPDATED = "scoreUpdated";
+        this.TIME_UPDATED = "timeUpdated";
+        this.UP_TIME = "upTime";
     }
 }

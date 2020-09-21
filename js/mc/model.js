@@ -3,8 +3,10 @@ class Model
     constructor()
     {
         this._score=0;
-        this._bullets;
-        this._lives = 3;
+        this._totalTimeMs = 2500;
+        this._timeElapsed = 0;
+        this._difficultyIndex = 1;
+
     }
     set score(val)
     {
@@ -16,12 +18,14 @@ class Model
     {
         return this._score;
     }
-    set lives(val)
+    set timeElapsed(val)
     {
-        this._lives=val;
+        this._timeElapsed=val;
+        console.log("time updated")
+        emitter.emit(G.TIME_UPDATED);
     }
-    get lives()
+    get timeElapsed()
     {
-        return this._lives;
+        return this._timeElapsed;
     }
 }

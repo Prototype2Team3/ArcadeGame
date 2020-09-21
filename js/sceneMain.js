@@ -26,19 +26,26 @@ class SceneMain extends Phaser.Scene {
         emitter = new Phaser.Events.EventEmitter();
         controller = new Controller();
         model.score = 0;
+        model.timeElapsed = 0;
+
 
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
+        this.start = this.getTime();
 
+        //UI set up
         this.background = this.add.image(0,0, 'background');
         this.background.setOrigin(0,0);
 
         this.circle = this.add.image(this.centerX,this.centerY, 'circle');
-
-        //UI set up
+        //money bar
         this.sb = new ScoreBox({scene:this});
         this.sb.x = 100;
         this.sb.y = 50;
+        //anger bar
+        this.ab = new AngerBar({scene:this});
+        this.ab.x = 400;
+        this.ab.y = 700;
 
         //grid set up
         var gridConfig={scene:this}
@@ -55,8 +62,12 @@ class SceneMain extends Phaser.Scene {
         this.leftPressed = false;
         this.rightPressed = false;
 
+        //game set up
         this.items = [];
-        this.time.addEvent({ delay: 1000, callback: this.handleItemCreation, callbackScope: this, loop: true });
+        this.time.addEvent({ delay: 2000, callback: this.handleItemCreation, callbackScope: this, loop: true });
+        this.time.addEvent({ delay: 1000, callback: this.handleGameTime, callbackScope: this, loop: true });
+        this.stages = 0;
+        this.isNotResting = true;
 
     }
 
@@ -64,20 +75,24 @@ class SceneMain extends Phaser.Scene {
         //Constant running loop
         this.handlePlayerInput();
         this.handleObjectDestruction();
+
     }
 
     handleItemCreation()
     {
-        var msTimeTravel = 3000;
-        var randomIdx = Math.floor(Math.random() * 16)
-        var sprites = ['chair', 'table', 'tv'];
-        var randItem = Math.floor(Math.random() * sprites.length);
-        var item = this.physics.add.sprite(this.centerX, this.centerY, sprites[randItem]);
-        item.setScale(0.83);
-        this.physics.moveTo(item, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
-        this.physics.add.overlap(this.character, item , this.handleCollision, null, this);
-
-        this.items.push(item);
+        if(this.isNotResting)
+        {
+            var msTimeTravel = 3000;
+            var randomIdx = Math.floor(Math.random() * 16)
+            var sprites = ['chair', 'table', 'tv'];
+            var randItem = Math.floor(Math.random() * sprites.length);
+            var item = this.physics.add.sprite(this.centerX, this.centerY, sprites[randItem]);
+            item.setScale(0.83);
+            this.physics.moveTo(item, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
+            this.physics.add.overlap(this.character, item , this.handleCollision, null, this);
+    
+            this.items.push(item);
+        }
 
     }
 
@@ -143,7 +158,6 @@ class SceneMain extends Phaser.Scene {
     {
  
         var r = 300;
-        var missedObject = false;
         for(var i = 0; i < this.items.length; i++)
         {
            if(this.items[i].body)
@@ -162,5 +176,29 @@ class SceneMain extends Phaser.Scene {
            
         }
      
+    }
+
+    handleGameTime()
+    {
+        emitter.emit(G.UP_TIME, 1);
+
+        if(model.timeElapsed == 25)
+        {
+            this.isNotResting = false;
+        }
+        else if (model.timeElapsed == 30)
+        {
+            model.timeElapsed = 0;
+            this.isNotResting = true;
+        }
+    }
+
+    checkEndGame()
+    {
+        if(model.score < 0)
+        {
+            console.log("Lose!");
+        }
+
     }
 }
