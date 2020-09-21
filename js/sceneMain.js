@@ -64,9 +64,10 @@ class SceneMain extends Phaser.Scene {
 
         //game set up
         this.items = [];
-        this.time.addEvent({ delay: 2000, callback: this.handleItemCreation, callbackScope: this, loop: true });
+        this.delayByStage = [2000, 1500, 1250, 1100, 1000, 900, 800, 700];
+        this.stageIndx = 0;
+        this.itemCreationEvent = this.time.addEvent({ delay: this.delayByStage[this.stageIndx], callback: this.handleItemCreation, callbackScope: this, loop: true });
         this.time.addEvent({ delay: 1000, callback: this.handleGameTime, callbackScope: this, loop: true });
-        this.stages = 0;
         this.isNotResting = true;
 
     }
@@ -190,6 +191,11 @@ class SceneMain extends Phaser.Scene {
         {
             model.timeElapsed = 0;
             this.isNotResting = true;
+            if (this.stageIndx < 7)
+            {
+                this.stageIndx++;
+                this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
+            }
         }
     }
 
