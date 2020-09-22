@@ -48,7 +48,6 @@ class Shooter extends Phaser.GameObjects.Container
 
       fire(Lane, physics) {
           const bullet = new Bullet(this.config, this.graphics, physics, Lane ? Lane : this.currentLane );
-       // bullet.draw(Lane);
         return bullet;
       }
 }

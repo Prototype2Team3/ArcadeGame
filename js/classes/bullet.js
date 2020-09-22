@@ -8,6 +8,7 @@ class Bullet extends Phaser.GameObjects.Container
         this.zPos = 0;
         this.scene.add.existing(this);
         this.Lane = lane;
+        this.position = [];
         
     }
 
@@ -22,6 +23,7 @@ class Bullet extends Phaser.GameObjects.Container
         const easeFraction = Util.travelOutLane(this.zPos / 120);
         const distanceInLane = Util.vector(start, end, easeFraction);
         const pos = Util.addVector(start, distanceInLane);
+        this.position = pos;
         this.graphics.arc(
           pos[0], pos[1], 3 * (1 - easeFraction) + 1, 0, 2 * Math.PI, true
         );

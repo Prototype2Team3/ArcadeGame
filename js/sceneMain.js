@@ -21,10 +21,9 @@ class SceneMain extends Phaser.Scene {
         this.board.makeLanes();
         this.board.drawLanes();
         //add physics
-        //this.bulletGroup = this.physics.add.group();
        
-        this.enemy = new Enemy({scene:this}, this.graphics, this.board.Lanes);
-        
+
+        this.time.addEvent({ delay: 700, callback: this.handleEnemyCreation, callbackScope: this, loop: true });
 
         this.input.mouse.capture = true;
 
@@ -46,7 +45,21 @@ class SceneMain extends Phaser.Scene {
         this.board.clearBoard();
         this.movePointer();
         this.drawBullets();
-        this.enemy.draw(this.graphics, this.board.laneCenter);
+
+        for(var i =0; i < this.enemies.length; i++)
+        {
+          this.enemies[i].draw(this.graphics, this.board.laneCenter);
+        }
+
+        this.checkCollisions();
+
+
+    }
+
+    handleEnemyCreation()
+    {
+
+        this.enemies.push(new Enemy({scene:this}, this.graphics, this.board.Lanes));
 
     }
 
@@ -83,6 +96,21 @@ class SceneMain extends Phaser.Scene {
               this.shooter.draw(this.boundary, 0xfff000);
             }
         }
+    }
+
+    checkCollisions() {
+      for (let i = 0; i < this.enemies.length; i++) {
+        for (let j = 0; j < this.bullets.length; j++) {
+          const enemy = this.enemies[i];
+          const bullet = this.bullets[j];
+          if (enemy)
+          {
+            if (enemy.collidedWith(bullet)) {
+              this.enemies.splice(enemy, 1);
+            }
+          }
+        }
+      }
     }
 
 }

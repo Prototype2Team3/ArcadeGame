@@ -75,8 +75,14 @@ class Enemy extends Phaser.GameObjects.Container
       move() {
         
           if (this.zPos > 0) {
-            this.zPos -= 1;
+            this.zPos -= 0.75;
           }
+      }
+
+      collidedWith(bullet) {
+        if (bullet instanceof Bullet) {
+          return this.Lane === bullet.Lane && (Math.ceil(this.zPos) - bullet.zPos) < 1;
+        }
       }
     
 }
