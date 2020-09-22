@@ -64,6 +64,8 @@ class SceneMain extends Phaser.Scene {
 
         //game set up
         this.items = [];
+        this.itemsSavedInRound = 0;
+        this.itemsNeedToSavePerLevel = [12, 16, 20, 22, 25, 27, 31, 35];
         this.delayByStage = [2000, 1500, 1250, 1100, 1000, 900, 800, 700];
         this.stageIndx = 0;
         this.itemCreationEvent = this.time.addEvent({ delay: this.delayByStage[this.stageIndx], callback: this.handleItemCreation, callbackScope: this, loop: true });
@@ -76,6 +78,7 @@ class SceneMain extends Phaser.Scene {
         //Constant running loop
         this.handlePlayerInput();
         this.handleObjectDestruction();
+        this.handleDifficultyLevel();
 
     }
 
@@ -126,7 +129,7 @@ class SceneMain extends Phaser.Scene {
         }
 
         var elapsed = Math.abs(this.downtime - this.getTime());
-        if(elapsed > 60)
+        if(elapsed > 80)
         {
     
             this.leftPressed = false;
@@ -152,6 +155,7 @@ class SceneMain extends Phaser.Scene {
        
        item.disableBody(true, true);
        emitter.emit(G.UP_POINTS, 1);
+       this.itemsSavedInRound++;
        
     }
 
@@ -191,10 +195,19 @@ class SceneMain extends Phaser.Scene {
         {
             model.timeElapsed = 0;
             this.isNotResting = true;
+        }
+    }
+
+    handleDifficultyLevel()
+    {
+        if(this.itemsNeedToSavePerLevel[this.stageIndx] == this.itemsSavedInRound)
+        {
             if (this.stageIndx < 7)
             {
                 this.stageIndx++;
+                console.log("LEVEL " + this.stageIndx)
                 this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
+                this.itemsSavedInRound = 0;
             }
         }
     }
