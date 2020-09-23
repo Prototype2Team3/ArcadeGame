@@ -5,10 +5,17 @@ class SceneMain extends Phaser.Scene {
     preload()
     {
         //Load Images or Sounds here
-        this.load.image("character", "images/character/front.png");
+        this.load.image("character", "images/VectorArt/Character_T.png");
+        this.load.image("background_vector", "images/VectorArt/Background.png");
+        this.load.image("sofa", "images/VectorArt/Prop_Sofa.png");
+        this.load.image("tv", "images/VectorArt/Prop_TV.png");
+        this.load.image("house_vector", "images/VectorArt/House.png");
+        this.load.image("anger_container", "images/VectorArt/AngerBar_Container.png");
+        this.load.image("anger_icon", "images/VectorArt/AngerBar_Icon.png");
+        this.load.image("anger_block", "images/VectorArt/AngerBar_Block.png");
         this.load.image("chair", "images/furniture/chair.png");
-        this.load.image("table", "images/furniture/table.png");
-        this.load.image("tv", "images/furniture/TV.png");
+       // this.load.image("table", "images/furniture/table.png");
+        //this.load.image("tv", "images/furniture/TV.png");
         this.load.image("background", "images/scene.png");
         this.load.image("circle", "images/circle.png");
         this.load.image("knife", "images/furniture/knife.png");
@@ -36,8 +43,9 @@ class SceneMain extends Phaser.Scene {
         this.start = this.getTime();
 
         //UI set up
-        this.background = this.add.image(0,0, 'background');
+        this.background = this.add.image(0,0, 'background_vector');
         this.background.setOrigin(0,0);
+        this.house = this.add.image(400,400, 'house_vector');
 
         this.circle = this.add.image(this.centerX,this.centerY, 'circle');
         //money bar
@@ -48,6 +56,11 @@ class SceneMain extends Phaser.Scene {
         this.ab = new AngerBar({scene:this});
         this.ab.x = 400;
         this.ab.y = 700;
+        //level bar
+        this.lb = new LevelBar({scene:this});
+        this.lb.x = 50;
+        this.lb.y = 200;
+
 
         //grid set up
         var gridConfig={scene:this}
@@ -95,7 +108,7 @@ class SceneMain extends Phaser.Scene {
         {
             var msTimeTravel = 3000;
             var randomIdx = Math.floor(Math.random() * 16)
-            var sprites = ['chair', 'table', 'tv' , 'knife'];
+            var sprites = [ 'sofa', 'tv' , 'knife'];
             var randItem = this.stageIndx < 8? Math.floor(Math.random() * (sprites.length - 1)) : Math.floor(Math.random() * (sprites.length));
            //var randItem = Math.floor(Math.random() * (sprites.length));
             var item = this.physics.add.sprite(this.centerX, this.centerY, sprites[randItem]);
@@ -236,6 +249,7 @@ class SceneMain extends Phaser.Scene {
             if (this.stageIndx < 8)
             {
                 this.stageIndx++;
+                this.lb.levelUpdated(this.stageIndx);
                 console.log("level ", this.stageIndx)
                 this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
                 this.itemsSavedInRound = 0;
