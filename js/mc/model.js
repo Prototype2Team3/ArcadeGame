@@ -11,7 +11,6 @@ class Model
     set score(val)
     {
         this._score=val;
-        console.log("score updated");
         emitter.emit(G.SCORE_UPDATED);
     }
     get score()
@@ -21,7 +20,6 @@ class Model
     set timeElapsed(val)
     {
         this._timeElapsed=val;
-        console.log("time updated")
         emitter.emit(G.TIME_UPDATED);
     }
     get timeElapsed()

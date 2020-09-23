@@ -11,6 +11,8 @@ class SceneMain extends Phaser.Scene {
         this.load.image("tv", "images/furniture/TV.png");
         this.load.image("background", "images/scene.png");
         this.load.image("circle", "images/circle.png");
+        this.load.image("knife", "images/furniture/knife.png");
+
     }
 
     getTime() {
@@ -57,6 +59,7 @@ class SceneMain extends Phaser.Scene {
         this.character = this.physics.add.sprite(this.positions[0].X, this.positions[0].Y, 'character');
         this.character.setScale(0.83);
         this.positionIndex = 0;
+        this.moneySigns = 0;
         cursors = this.input.keyboard.createCursorKeys();
         this.actionButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.leftPressed = false;
@@ -65,31 +68,35 @@ class SceneMain extends Phaser.Scene {
         //game set up
         this.items = [];
         this.itemsSavedInRound = 0;
-        this.itemsNeedToSavePerLevel = [12, 16, 20, 22, 25, 27, 31, 35];
-        this.delayByStage = [2000, 1500, 1250, 1100, 1000, 900, 800, 700];
+        this.itemsNeedToSavePerLevel = [12, 16, 20, 22, 25, 27, 31, 35, 0];
+        this.delayByStage = [2000, 1500, 1250, 1100, 1000, 900, 800, 700, 650];
         this.stageIndx = 0;
         this.itemCreationEvent = this.time.addEvent({ delay: this.delayByStage[this.stageIndx], callback: this.handleItemCreation, callbackScope: this, loop: true });
         this.time.addEvent({ delay: 1000, callback: this.handleGameTime, callbackScope: this, loop: true });
         this.isNotResting = true;
+        this.gameStoped = false;
 
     }
 
     update() {
         //Constant running loop
-        this.handlePlayerInput();
-        this.handleObjectDestruction();
-        this.handleDifficultyLevel();
-
+        if(!this.gameStoped)
+        {
+            this.handlePlayerInput();
+            this.handleObjectDestruction();
+            this.handleDifficultyLevel();
+        }
     }
 
     handleItemCreation()
     {
-        if(this.isNotResting)
+        if(this.isNotResting && !this.gameStoped)
         {
             var msTimeTravel = 3000;
             var randomIdx = Math.floor(Math.random() * 16)
-            var sprites = ['chair', 'table', 'tv'];
-            var randItem = Math.floor(Math.random() * sprites.length);
+            var sprites = ['chair', 'table', 'tv' , 'knife'];
+           //var randItem = this.stageIndx < 8? Math.floor(Math.random() * (sprites.length - 1)) : Math.floor(Math.random() * (sprites.length));
+           var randItem = Math.floor(Math.random() * (sprites.length));
             var item = this.physics.add.sprite(this.centerX, this.centerY, sprites[randItem]);
             item.setScale(0.83);
             this.physics.moveTo(item, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
@@ -142,7 +149,25 @@ class SceneMain extends Phaser.Scene {
 
     handleCollision(character,item)
     {
-        //TODO: in here handle what happens when item ovelaps with player
+
+        if(item.texture.key != "knife")
+        {
+            emitter.emit(G.UP_POINTS, 1);
+            this.itemsSavedInRound++;
+        }
+        else 
+        {
+            //if money signs > 0 ? decrease money signs by 1
+            //else end game
+            if(this.moneySigns > 0)
+            {
+                this.moneySigns--;
+            } 
+            else 
+            {
+                this.EndGame();
+            }
+        }
    
         for(var i = 0; i < this.items.length; i++)
         {
@@ -154,8 +179,6 @@ class SceneMain extends Phaser.Scene {
         }
        
        item.disableBody(true, true);
-       emitter.emit(G.UP_POINTS, 1);
-       this.itemsSavedInRound++;
        
     }
 
@@ -173,7 +196,10 @@ class SceneMain extends Phaser.Scene {
                 var item = this.items[i];
                 this.items.slice(this.items[i]);
 
-                emitter.emit(G.DOWN_POINTS, 3);
+                if(item.texture.key != "knife")
+                {
+                    emitter.emit(G.DOWN_POINTS, 3);
+                }
                 item.destroy();
 
             }
@@ -185,16 +211,19 @@ class SceneMain extends Phaser.Scene {
 
     handleGameTime()
     {
-        emitter.emit(G.UP_TIME, 1);
+        if(this.stageIndx < 8 && !this.gameStoped)
+        {
+            emitter.emit(G.UP_TIME, 1);
 
-        if(model.timeElapsed == 25)
-        {
-            this.isNotResting = false;
-        }
-        else if (model.timeElapsed == 30)
-        {
-            model.timeElapsed = 0;
-            this.isNotResting = true;
+            if(model.timeElapsed == 25)
+            {
+                this.isNotResting = false;
+            }
+            else if (model.timeElapsed == 30)
+            {
+                model.timeElapsed = 0;
+                this.isNotResting = true;
+            }
         }
     }
 
@@ -202,22 +231,40 @@ class SceneMain extends Phaser.Scene {
     {
         if(this.itemsNeedToSavePerLevel[this.stageIndx] == this.itemsSavedInRound)
         {
-            if (this.stageIndx < 7)
+            if (this.stageIndx < 8)
             {
                 this.stageIndx++;
-                console.log("LEVEL " + this.stageIndx)
+                console.log("level ", this.stageIndx)
                 this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
                 this.itemsSavedInRound = 0;
+
             }
+        }
+
+        //fiasco mode
+        if(this.stageIndx == 8)
+        {
+            console.log("fiasco mode");
+            this.sb.destroy();
         }
     }
 
-    checkEndGame()
+    handleScoreIncrease()
     {
-        if(model.score < 0)
+        if (model.score == 80)
         {
-            console.log("Lose!");
+            model.score = 0;
+            this.moneySigns++;
         }
 
+        if(this.moneySigns > 2)
+        {
+            this.EndGame();
+        }
+    }
+
+    EndGame()
+    {
+        this.gameStoped = true;
     }
 }
