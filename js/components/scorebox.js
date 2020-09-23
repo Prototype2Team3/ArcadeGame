@@ -33,4 +33,16 @@ class ScoreBox extends Phaser.GameObjects.Container
             this.progressBar.clear();
         }
     }
+
+    updateDollars(moneysigns)
+    {
+        var sign = "Money Bar";
+        for (var i = 0; i < moneysigns; i++)
+        {
+            sign += " $ ";
+        }
+
+        this.text1.text = sign;
+
+    }
 }

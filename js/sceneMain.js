@@ -85,6 +85,7 @@ class SceneMain extends Phaser.Scene {
             this.handlePlayerInput();
             this.handleObjectDestruction();
             this.handleDifficultyLevel();
+            this.handleScoreIncrease();
         }
     }
 
@@ -95,8 +96,8 @@ class SceneMain extends Phaser.Scene {
             var msTimeTravel = 3000;
             var randomIdx = Math.floor(Math.random() * 16)
             var sprites = ['chair', 'table', 'tv' , 'knife'];
-           //var randItem = this.stageIndx < 8? Math.floor(Math.random() * (sprites.length - 1)) : Math.floor(Math.random() * (sprites.length));
-           var randItem = Math.floor(Math.random() * (sprites.length));
+            var randItem = this.stageIndx < 8? Math.floor(Math.random() * (sprites.length - 1)) : Math.floor(Math.random() * (sprites.length));
+           //var randItem = Math.floor(Math.random() * (sprites.length));
             var item = this.physics.add.sprite(this.centerX, this.centerY, sprites[randItem]);
             item.setScale(0.83);
             this.physics.moveTo(item, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
@@ -162,6 +163,7 @@ class SceneMain extends Phaser.Scene {
             if(this.moneySigns > 0)
             {
                 this.moneySigns--;
+                this.sb.updateDollars(this.moneySigns);
             } 
             else 
             {
@@ -245,6 +247,7 @@ class SceneMain extends Phaser.Scene {
         if(this.stageIndx == 8)
         {
             console.log("fiasco mode");
+            this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
             this.sb.destroy();
         }
     }
@@ -255,6 +258,7 @@ class SceneMain extends Phaser.Scene {
         {
             model.score = 0;
             this.moneySigns++;
+            this.sb.updateDollars(this.moneySigns);
         }
 
         if(this.moneySigns > 2)
