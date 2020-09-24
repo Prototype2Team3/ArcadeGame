@@ -5,14 +5,24 @@ class AngerBar extends Phaser.GameObjects.Container
         super(config.scene);
         this.scene=config.scene;
 
-        this.angerBar = this.scene.add.graphics();
-        this.angerBox = this.scene.add.graphics();
-        this.angerBar.lineStyle(2, 0x000000);
-        this.angerBox.fillStyle(0x222222, 0.5);
-        this.angerBox.fillRect(275, 750, 250, 25);
-        this.text2 = this.scene.add.text(0,50, "Anger Bar");
-        this.text2.setOrigin(0.5,0.5);
-        this.add(this.text2);
+        this.angerBar = this.scene.add.image(400, 750, 'anger_container');
+        this.angerIcon = this.scene.add.image(335, 745, 'anger_icon');
+        this.angerBlocks =[];
+        this.angerBlock1 = this.scene.add.image(365, 750, 'anger_block');
+        this.angerBlock2 = this.scene.add.image(383 , 750, 'anger_block');
+        this.angerBlock3 = this.scene.add.image(401, 750, 'anger_block');
+        this.angerBlock4 = this.scene.add.image(419, 750, 'anger_block');
+        this.angerBlock5 = this.scene.add.image(437, 750, 'anger_block');
+        this.angerBlocks.push(this.angerBlock1);
+        this.angerBlocks.push(this.angerBlock2);
+        this.angerBlocks.push(this.angerBlock3);
+        this.angerBlocks.push(this.angerBlock4);
+        this.angerBlocks.push(this.angerBlock5);
+
+        this.angerBlocks.forEach((block) =>{
+            block.setScale(0.75);
+            block.visible = false;
+        });
 
         this.scene.add.existing(this);
 
@@ -22,27 +32,53 @@ class AngerBar extends Phaser.GameObjects.Container
     timeUpdated()
     {
         //this.text1.setText("Money bar:" + model.score);
-        if(model.timeElapsed > 0 && model.timeElapsed <= 8)
+        if(model.timeElapsed >= 0 && model.timeElapsed < 5)
         {
-            this.angerBar.clear();
-            this.angerBar.fillStyle(0xffff00, 1);
-            this.angerBar.fillRect(275, 750, model.timeElapsed * 10, 25);
+            this.angerBlocks[0].visible = false;
+            this.angerBlocks[1].visible = false;
+            this.angerBlocks[2].visible = false;
+            this.angerBlocks[3].visible = false;
+            this.angerBlocks[4].visible = false;
         }
-        else if (model.timeElapsed > 8 && model.timeElapsed <= 20)
+       else if(model.timeElapsed >= 5 && model.timeElapsed < 10 )
         {
-            this.angerBar.clear();
-            this.angerBar.fillStyle(0xffa500, 1);
-            this.angerBar.fillRect(275, 750, model.timeElapsed * 10, 25);
+            this.angerBlocks[0].visible = true;
+            this.angerBlocks[1].visible = false;
+            this.angerBlocks[2].visible = false;
+            this.angerBlocks[3].visible = false;
+            this.angerBlocks[4].visible = false;
         }
-        else if (model.timeElapsed > 20 && model.timeElapsed < 26)
+        else if(model.timeElapsed >= 10 && model.timeElapsed < 15)
         {
-            this.angerBar.clear();
-            this.angerBar.fillStyle(0xff0000, 1);
-            this.angerBar.fillRect(275, 750, model.timeElapsed * 10, 25);
+            this.angerBlocks[0].visible = true;
+            this.angerBlocks[1].visible = true;
+            this.angerBlocks[2].visible = false;
+            this.angerBlocks[3].visible = false;
+            this.angerBlocks[4].visible = false;
         }
-        else
+        else if(model.timeElapsed >= 15 && model.timeElapsed < 20)
         {
-            this.angerBar.clear();
+            this.angerBlocks[0].visible = true;
+            this.angerBlocks[1].visible = true;
+            this.angerBlocks[2].visible = true;
+            this.angerBlocks[3].visible = false;
+            this.angerBlocks[4].visible = false;
+        }
+        else if(model.timeElapsed >= 20 && model.timeElapsed < 25)
+        {
+            this.angerBlocks[0].visible = true;
+            this.angerBlocks[1].visible = true;
+            this.angerBlocks[2].visible = true;
+            this.angerBlocks[3].visible = true;
+            this.angerBlocks[4].visible = false;
+        }
+       else if(model.timeElapsed >= 25 )
+        {
+            this.angerBlocks[0].visible = true;
+            this.angerBlocks[1].visible = true;
+            this.angerBlocks[2].visible = true;
+            this.angerBlocks[3].visible = true;
+            this.angerBlocks[4].visible = true;
         }
     }
 }
