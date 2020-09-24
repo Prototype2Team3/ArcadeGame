@@ -3,6 +3,7 @@ class Model
     constructor()
     {
         this._score=0;
+        this._moneySigns = 0;
         this._totalTimeMs = 2500;
         this._timeElapsed = 0;
         this._difficultyIndex = 1;
@@ -25,5 +26,13 @@ class Model
     get timeElapsed()
     {
         return this._timeElapsed;
+    }
+    set moneySigns(val)
+    {
+        this._moneySigns=val;
+    }
+    get moneySigns()
+    {
+        return this._moneySigns;
     }
 }

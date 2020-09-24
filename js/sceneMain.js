@@ -13,6 +13,9 @@ class SceneMain extends Phaser.Scene {
         this.load.image("anger_container", "images/VectorArt/AngerBar_Container.png");
         this.load.image("anger_icon", "images/VectorArt/AngerBar_Icon.png");
         this.load.image("anger_block", "images/VectorArt/AngerBar_Block.png");
+        this.load.image("money_container", "images/VectorArt/MoneyBar_Container.png");
+        this.load.image("money_sign", "images/VectorArt/MoneyBar_DollarSign.png");
+        this.load.image("money_block", "images/VectorArt/MoneyBar_Block.png");
         this.load.image("chair", "images/furniture/chair.png");
        // this.load.image("table", "images/furniture/table.png");
         //this.load.image("tv", "images/furniture/TV.png");
@@ -34,7 +37,8 @@ class SceneMain extends Phaser.Scene {
         //Define objects
         emitter = new Phaser.Events.EventEmitter();
         controller = new Controller();
-        model.score = 0;
+        model.score = 75;
+        model.moneySigns = 2;
         model.timeElapsed = 0;
 
 
@@ -57,9 +61,9 @@ class SceneMain extends Phaser.Scene {
         this.ab.x = 400;
         this.ab.y = 700;
         //level bar
-        this.lb = new LevelBar({scene:this});
-        this.lb.x = 50;
-        this.lb.y = 200;
+        // this.lb = new LevelBar({scene:this});
+        // this.lb.x = 50;
+        // this.lb.y = 200;
 
 
         //grid set up
@@ -72,7 +76,6 @@ class SceneMain extends Phaser.Scene {
         this.character = this.physics.add.sprite(this.positions[0].X, this.positions[0].Y, 'character');
         this.character.setScale(0.83);
         this.positionIndex = 0;
-        this.moneySigns = 0;
         cursors = this.input.keyboard.createCursorKeys();
         this.actionButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.leftPressed = false;
@@ -173,10 +176,10 @@ class SceneMain extends Phaser.Scene {
         {
             //if money signs > 0 ? decrease money signs by 1
             //else end game
-            if(this.moneySigns > 0)
+            if(model.moneySigns > 0)
             {
-                this.moneySigns--;
-                this.sb.updateDollars(this.moneySigns);
+                model.moneySigns--;
+                this.sb.updateDollars(model.moneySigns);
             } 
             else 
             {
@@ -270,13 +273,16 @@ class SceneMain extends Phaser.Scene {
     {
         if (model.score == 80)
         {
+            console.log(model.moneySigns)
             model.score = 0;
-            this.moneySigns++;
-            this.sb.updateDollars(this.moneySigns);
+            model.moneySigns++;
+            console.log(model.moneySigns);
+            this.sb.updateDollars(model.moneySigns);
         }
 
-        if(this.moneySigns > 2)
+        if(model.moneySigns > 2)
         {
+            console.log("here??")
             this.EndGame();
         }
     }
