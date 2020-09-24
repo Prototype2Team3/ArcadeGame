@@ -64,7 +64,7 @@ class SceneMain extends Phaser.Scene {
         this.background.setOrigin(0,0);
         this.house = this.add.image(400,400, 'house_vector');
 
-        this.circle = this.add.image(this.centerX,this.centerY, 'circle');
+        //this.circle = this.add.image(this.centerX,this.centerY, 'circle');
         //money bar
         this.sb = new ScoreBox({scene:this});
         this.sb.x = 100;
