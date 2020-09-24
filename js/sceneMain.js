@@ -5,20 +5,33 @@ class SceneMain extends Phaser.Scene {
     preload()
     {
         //Load Images or Sounds here
-        this.load.image("character", "images/VectorArt/Character_T.png");
+       
         this.load.image("background_vector", "images/VectorArt/Background.png");
         this.load.image("sofa", "images/VectorArt/Prop_Sofa.png");
         this.load.image("tv", "images/VectorArt/Prop_TV.png");
         this.load.image("house_vector", "images/VectorArt/House.png");
+        this.load.image("character", "images/VectorArt/Character_T.png");
         this.load.image("anger_container", "images/VectorArt/AngerBar_Container.png");
         this.load.image("anger_icon", "images/VectorArt/AngerBar_Icon.png");
         this.load.image("anger_block", "images/VectorArt/AngerBar_Block.png");
         this.load.image("money_container", "images/VectorArt/MoneyBar_Container.png");
         this.load.image("money_sign", "images/VectorArt/MoneyBar_DollarSign.png");
         this.load.image("money_block", "images/VectorArt/MoneyBar_Block.png");
+
+        // this.load.image("background_vector", "images/PixelArt/Background.png");
+        // this.load.image("sofa", "images/PixelArt/Prop_Sofa.png");
+        // this.load.image("tv", "images/PixelArt/Prop_TV.png");
+        // this.load.image("house_vector", "images/PixelArt/House.png");
+        // this.load.image("character", "images/PixelArt/Character_T.png");
+        // this.load.image("anger_container", "images/PixelArt/AngerBar_Container.png");
+        // this.load.image("anger_icon", "images/PixelArt/AngerBar_Icon.png");
+        // this.load.image("anger_block", "images/PixelArt/AngerBar_Block.png");
+        // this.load.image("money_container", "images/PixelArt/MoneyBar_Container.png");
+        // this.load.image("money_sign", "images/PixelArt/MoneyBar_DollarSign.png");
+        // this.load.image("money_block", "images/PixelArt/MoneyBar_Block.png");
+
+
         this.load.image("chair", "images/furniture/chair.png");
-       // this.load.image("table", "images/furniture/table.png");
-        //this.load.image("tv", "images/furniture/TV.png");
         this.load.image("background", "images/scene.png");
         this.load.image("circle", "images/circle.png");
         this.load.image("knife", "images/furniture/knife.png");
