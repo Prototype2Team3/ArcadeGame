@@ -50,8 +50,8 @@ class SceneMain extends Phaser.Scene {
         //Define objects
         emitter = new Phaser.Events.EventEmitter();
         controller = new Controller();
-        model.score = 75;
-        model.moneySigns = 2;
+        model.score = 0;
+        model.moneySigns = 0;
         model.timeElapsed = 0;
 
 
