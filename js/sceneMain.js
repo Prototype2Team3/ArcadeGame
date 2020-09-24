@@ -74,9 +74,9 @@ class SceneMain extends Phaser.Scene {
         this.ab.x = 400;
         this.ab.y = 700;
         //level bar
-        // this.lb = new LevelBar({scene:this});
-        // this.lb.x = 50;
-        // this.lb.y = 200;
+        this.lb = new LevelBar({scene:this});
+        this.lb.x = 600;
+        this.lb.y = 50;
 
 
         //grid set up
@@ -90,7 +90,7 @@ class SceneMain extends Phaser.Scene {
         this.character.setScale(0.83);
         this.positionIndex = 0;
         cursors = this.input.keyboard.createCursorKeys();
-        this.actionButton = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.input.keyboard.on('keydown-' + 'SPACE',this.handleActionButton, this);
         this.leftPressed = false;
         this.rightPressed = false;
 
@@ -229,7 +229,10 @@ class SceneMain extends Phaser.Scene {
 
                 if(item.texture.key != "knife")
                 {
-                    emitter.emit(G.DOWN_POINTS, 3);
+                    if(model.score > 0)
+                    {
+                        emitter.emit(G.DOWN_POINTS, 3);
+                    }
                 }
                 item.destroy();
 
@@ -266,7 +269,6 @@ class SceneMain extends Phaser.Scene {
             {
                 this.stageIndx++;
                 this.lb.levelUpdated(this.stageIndx);
-                console.log("level ", this.stageIndx)
                 this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
                 this.itemsSavedInRound = 0;
 
@@ -295,8 +297,20 @@ class SceneMain extends Phaser.Scene {
 
         if(model.moneySigns > 2)
         {
-            console.log("here??")
             this.EndGame();
+        }
+    }
+
+    handleActionButton()
+    {
+        if (model.moneySigns > 0 && this.stageIndx > 0)
+        {
+            model.moneySigns--;
+            this.sb.updateDollars(model.moneySigns);
+            this.stageIndx--;
+            this.lb.levelUpdated(this.stageIndx);
+            this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
+            this.itemsSavedInRound = 0;
         }
     }
 
