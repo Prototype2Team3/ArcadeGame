@@ -286,12 +286,11 @@ class SceneMain extends Phaser.Scene {
 
     handleScoreIncrease()
     {
-        if (model.score == 80)
+        if (model.score == 60)
         {
             console.log(model.moneySigns)
             model.score = 0;
             model.moneySigns++;
-            console.log(model.moneySigns);
             this.sb.updateDollars(model.moneySigns);
         }
 
@@ -303,11 +302,11 @@ class SceneMain extends Phaser.Scene {
 
     handleActionButton()
     {
-        if (model.moneySigns > 0 && this.stageIndx > 0)
+        if (model.moneySigns > 0 && this.stageIndx > 1)
         {
             model.moneySigns--;
             this.sb.updateDollars(model.moneySigns);
-            this.stageIndx--;
+            this.stageIndx -= 2;
             this.lb.levelUpdated(this.stageIndx);
             this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
             this.itemsSavedInRound = 0;
