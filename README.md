@@ -6,7 +6,7 @@ The game is about reconciliation instead of destruction and we seek to portray t
 
 ## Getting Started
 Clone in your local computer. Latest version of the prototype is in the master branch and is currently running in GitHub pages. 
-AS far as any technical requirements all you need is whatever IDE you are comfortable with, ie. Visual Studio Code.
+As far as any technical requirements all you need is whatever IDE you are comfortable with, ie. Visual Studio Code.
 In order to get the game running in your local computer you will ned to run it in a server. For localhost you can download XAMPP in windows
 
 
