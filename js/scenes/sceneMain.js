@@ -34,8 +34,8 @@ class SceneMain extends Phaser.Scene {
 
     create() {
         //Define objects
-        emitter = new Phaser.Events.EventEmitter();
-        controller = new Controller();
+        // emitter = new Phaser.Events.EventEmitter();
+        // controller = new Controller();
         model.score = 0;
         model.moneySigns = 0;
         model.timeElapsed = 0;
@@ -183,7 +183,7 @@ class SceneMain extends Phaser.Scene {
         }
         else 
         {
-          this.EndGame();     
+          this.EndGame(false);     
         }
    
         for(var i = 0; i < this.items.length; i++)
@@ -219,7 +219,7 @@ class SceneMain extends Phaser.Scene {
                     if(model.score < 0)
                     {
                         
-                        this.EndGame();
+                        this.EndGame(false);
                     }
                 }
                 item.destroy();
@@ -276,7 +276,7 @@ class SceneMain extends Phaser.Scene {
 
         if(model.anger <= 0)
         {
-            this.EndGame();
+            this.EndGame(true);
         }
     }
 
@@ -285,7 +285,7 @@ class SceneMain extends Phaser.Scene {
         this.flower.visible = false;
     }
 
-    EndGame()
+    EndGame(playerWin)
     {
         this.gameStoped = true;
         this.items.forEach((item) => {
@@ -293,6 +293,8 @@ class SceneMain extends Phaser.Scene {
         });
 
         //determine which next scene to go to;
+
+        playerWin? this.scene.start('SceneWin') : this.scene.start('SceneLose');
 
     }
 }
