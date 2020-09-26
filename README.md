@@ -1,6 +1,7 @@
 # Temper S***t
 
-Temper S***t is an arcade type game inspired on Tempest gameplay mechanics except instead avoiding the enemy and the bullets you need to catch the onjects thrown at you in order to build your money resource which you woul use to decrease the anger bar in the bottom of the screen. 
+Temper S***t is an arcade type game inspired on Tempest gameplay mechanics except instead of avoiding the enemy and the bullets you need to catch the objects thrown at you in order to build your money resource which you would use to decrease the anger bar in the bottom of the screen. 
+The game is about reconciliation instead of destruction and we seek to portray this in a fun playful matter. 
 
 
 ## Getting Started
