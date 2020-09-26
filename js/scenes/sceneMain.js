@@ -18,22 +18,8 @@ class SceneMain extends Phaser.Scene {
         this.load.image("money_sign", "images/VectorArt/MoneyBar_DollarSign.png");
         this.load.image("money_block", "images/VectorArt/MoneyBar_Block.png");
 
-        // this.load.image("background_vector", "images/PixelArt/Background.png");
-        // this.load.image("sofa", "images/PixelArt/Prop_Sofa.png");
-        // this.load.image("tv", "images/PixelArt/Prop_TV.png");
-        // this.load.image("house_vector", "images/PixelArt/House.png");
-        // this.load.image("character", "images/PixelArt/Character_T.png");
-        // this.load.image("anger_container", "images/PixelArt/AngerBar_Container.png");
-        // this.load.image("anger_icon", "images/PixelArt/AngerBar_Icon.png");
-        // this.load.image("anger_block", "images/PixelArt/AngerBar_Block.png");
-        // this.load.image("money_container", "images/PixelArt/MoneyBar_Container.png");
-        // this.load.image("money_sign", "images/PixelArt/MoneyBar_DollarSign.png");
-        // this.load.image("money_block", "images/PixelArt/MoneyBar_Block.png");
+        this.load.image("flower", "images/VectorArt/flower.png")
 
-
-        this.load.image("chair", "images/furniture/chair.png");
-        this.load.image("background", "images/scene.png");
-        this.load.image("circle", "images/circle.png");
         this.load.image("knife", "images/furniture/knife.png");
 
     }
@@ -48,8 +34,8 @@ class SceneMain extends Phaser.Scene {
 
     create() {
         //Define objects
-        emitter = new Phaser.Events.EventEmitter();
-        controller = new Controller();
+        // emitter = new Phaser.Events.EventEmitter();
+        // controller = new Controller();
         model.score = 0;
         model.moneySigns = 0;
         model.timeElapsed = 0;
@@ -74,9 +60,9 @@ class SceneMain extends Phaser.Scene {
         this.ab.x = 400;
         this.ab.y = 700;
         //level bar
-        this.lb = new LevelBar({scene:this});
-        this.lb.x = 600;
-        this.lb.y = 50;
+        // this.lb = new LevelBar({scene:this});
+        // this.lb.x = 600;
+        // this.lb.y = 50;
 
 
         //grid set up
@@ -93,6 +79,9 @@ class SceneMain extends Phaser.Scene {
         this.input.keyboard.on('keydown-' + 'SPACE',this.handleActionButton, this);
         this.leftPressed = false;
         this.rightPressed = false;
+        this.flower = this.add.image(100, 100, 'flower');
+        this.flower.setScale(0.5);
+        this.flower.visible = false;
 
         //game set up
         this.items = [];
@@ -101,7 +90,7 @@ class SceneMain extends Phaser.Scene {
         this.delayByStage = [2000, 1500, 1250, 1100, 1000, 900, 800, 700, 650];
         this.stageIndx = 0;
         this.itemCreationEvent = this.time.addEvent({ delay: this.delayByStage[this.stageIndx], callback: this.handleItemCreation, callbackScope: this, loop: true });
-        this.time.addEvent({ delay: 1000, callback: this.handleGameTime, callbackScope: this, loop: true });
+        //this.time.addEvent({ delay: 1000, callback: this.handleGameTime, callbackScope: this, loop: true });
         this.isNotResting = true;
         this.gameStoped = false;
 
@@ -114,7 +103,7 @@ class SceneMain extends Phaser.Scene {
             this.handlePlayerInput();
             this.handleObjectDestruction();
             this.handleDifficultyLevel();
-            this.handleScoreIncrease();
+            //this.handleScoreIncrease();
         }
     }
 
@@ -182,22 +171,19 @@ class SceneMain extends Phaser.Scene {
 
         if(item.texture.key != "knife")
         {
-            emitter.emit(G.UP_POINTS, 1);
+            if(this.stageIndx < 8)
+            {
+                emitter.emit(G.UP_POINTS, 1);
+            }
+            else
+            {
+                emitter.emit(G.UP_POINTS, 5);
+            }
             this.itemsSavedInRound++;
         }
         else 
         {
-            //if money signs > 0 ? decrease money signs by 1
-            //else end game
-            if(model.moneySigns > 0)
-            {
-                model.moneySigns--;
-                this.sb.updateDollars(model.moneySigns);
-            } 
-            else 
-            {
-                this.EndGame();
-            }
+          this.EndGame(false);     
         }
    
         for(var i = 0; i < this.items.length; i++)
@@ -229,9 +215,11 @@ class SceneMain extends Phaser.Scene {
 
                 if(item.texture.key != "knife")
                 {
-                    if(model.score > 0)
+                    emitter.emit(G.DOWN_POINTS, 3);
+                    if(model.score < 0)
                     {
-                        emitter.emit(G.DOWN_POINTS, 3);
+                        
+                        this.EndGame(false);
                     }
                 }
                 item.destroy();
@@ -243,24 +231,6 @@ class SceneMain extends Phaser.Scene {
      
     }
 
-    handleGameTime()
-    {
-        if(this.stageIndx < 8 && !this.gameStoped)
-        {
-            emitter.emit(G.UP_TIME, 1);
-
-            if(model.timeElapsed == 25)
-            {
-                this.isNotResting = false;
-            }
-            else if (model.timeElapsed == 30)
-            {
-                model.timeElapsed = 0;
-                this.isNotResting = true;
-            }
-        }
-    }
-
     handleDifficultyLevel()
     {
         if(this.itemsNeedToSavePerLevel[this.stageIndx] == this.itemsSavedInRound)
@@ -268,7 +238,7 @@ class SceneMain extends Phaser.Scene {
             if (this.stageIndx < 8)
             {
                 this.stageIndx++;
-                this.lb.levelUpdated(this.stageIndx);
+                //this.lb.levelUpdated(this.stageIndx);
                 this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
                 this.itemsSavedInRound = 0;
 
@@ -280,41 +250,51 @@ class SceneMain extends Phaser.Scene {
         {
             console.log("fiasco mode");
             this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
-            this.sb.destroy();
         }
     }
 
     handleScoreIncrease()
     {
-        if (model.score == 60)
-        {
-            console.log(model.moneySigns)
-            model.score = 0;
-            model.moneySigns++;
-            this.sb.updateDollars(model.moneySigns);
-        }
-
-        if(model.moneySigns > 2)
-        {
-            this.EndGame();
-        }
+      
     }
 
     handleActionButton()
     {
-        if (model.moneySigns > 0 && this.stageIndx > 1)
+        if(!(model.score - 2 < 0))
         {
-            model.moneySigns--;
-            this.sb.updateDollars(model.moneySigns);
-            this.stageIndx -= 2;
-            this.lb.levelUpdated(this.stageIndx);
-            this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
-            this.itemsSavedInRound = 0;
+            model.score -=2;
+            model.anger -=1;
+
+            this.flower.x = this.character.x + 30;
+            this.flower.y = this.character.y - 40;
+            this.flower.visible = true
+
+            this.time.addEvent({ delay: 300, callback: this.hideFlower, callbackScope: this, loop: false });
+        }
+
+        this.ab.angerUpdated();
+
+        if(model.anger <= 0)
+        {
+            this.EndGame(true);
         }
     }
 
-    EndGame()
+    hideFlower()
+    {
+        this.flower.visible = false;
+    }
+
+    EndGame(playerWin)
     {
         this.gameStoped = true;
+        this.items.forEach((item) => {
+            item.destroy();
+        });
+
+        //determine which next scene to go to;
+
+        playerWin? this.scene.start('SceneWin') : this.scene.start('SceneLose');
+
     }
 }

@@ -17,7 +17,7 @@ window.onload=function()
                 debug: false
             }
         },
-        scene: [SceneMain]
+        scene: [SceneTitle, SceneMain, SceneWin, SceneLose]
     }
 
     G = new Constants();
