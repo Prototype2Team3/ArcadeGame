@@ -4,8 +4,8 @@ class SceneTitle extends Phaser.Scene {
     }
     preload()
     {
-        this.load.image("background", "images/VectorArt/TitleScreen_Background.png");
-        this.load.image("start_btn", "images/VectorArt/button.png");
+        this.load.image("background", "images/VectorArt/TitleScreen_V2.png");
+        this.load.image("start_btn", "images/VectorArt/Startbutton.png");
     }
     create() {
         console.log("SceneTitle!");
@@ -16,10 +16,10 @@ class SceneTitle extends Phaser.Scene {
         this.background.setScale(0.75);
         this.background.setOrigin(0,0);
 
-        this.startButton = new Button({scene:this, key: 'start_btn', text:'START', x: 400, y: 750, event: 'button_pressed', params: 'start'});
+        this.startButton = new Button({scene:this, key: 'start_btn', text:'', x: 400, y: 750, event: 'button_pressed', params: 'start'});
 
         emitter.on('button_pressed', this.startPressed, this);
-        
+
     }
 
     startPressed()
