@@ -39,6 +39,12 @@ class SceneMain extends Phaser.Scene {
 
         this.load.spritesheet('smoke', "images/VectorArt/Spritesheet/BrokeAnimation_Spritesheet.png", {frameWidth: 40, frameHeight: 40});
 
+        //load sounds
+        this.load.audio('collect', 'sounds/Collect.wav');
+        this.load.audio('missed', 'sounds/missed.wav');
+        this.load.audio('throw', 'sounds/Throwing.wav');
+        this.load.audio('main', 'sounds/BackgroundMusic.wav');
+
         
 
     }
@@ -128,6 +134,14 @@ class SceneMain extends Phaser.Scene {
 
         this.smoke.visible = false;
 
+        //sounds
+        this.collectSound=this.sound.add('collect');
+        this.missedSound=this.sound.add('missed');
+        this.throwSound=this.sound.add('throw');
+        this.mainSound=this.sound.add('main');
+        this.mainSound.loop = true;
+        this.mainSound.play();
+
 
     }
 
@@ -153,6 +167,7 @@ class SceneMain extends Phaser.Scene {
             var randItem = this.stageIndx < 8? Math.floor(Math.random() * (sprites.length)) : Math.floor(Math.random() * (fiascoModeItems.length));
            //var randItem = Math.floor(Math.random() * (sprites.length));
             var item = this.physics.add.sprite(this.centerX, this.centerY, this.stageIndx < 8? sprites[randItem] : fiascoModeItems[randItem]);
+            this.throwSound.play();
             item.setScale(0.83);
             this.physics.moveTo(item, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
             this.physics.add.overlap(this.character, item , this.handleCollision, null, this);
@@ -216,6 +231,8 @@ class SceneMain extends Phaser.Scene {
             {
                 emitter.emit(G.UP_POINTS, 5);
             }
+
+            this.collectSound.play();
             this.itemsSavedInRound++;
         }
         else
@@ -255,6 +272,7 @@ class SceneMain extends Phaser.Scene {
                 if(!isDeadly)
                 {
                     emitter.emit(G.DOWN_POINTS, 3);
+                    this.missedSound.play();
                     if(model.score < 0)
                     {
                         
@@ -342,6 +360,7 @@ class SceneMain extends Phaser.Scene {
     EndGame(playerWin)
     {
         this.gameStoped = true;
+        this.mainSound.stop();
         // this.items.forEach((item) => {
         //     item.destroy();
         // });
