@@ -5,7 +5,7 @@ class SceneTitle extends Phaser.Scene {
     preload()
     {
         this.load.image("background", "images/VectorArt/TitleScreen_V2.png");
-        this.load.image("start_btn", "images/VectorArt/Startbutton.png");
+        this.load.image("start_btn", "images/VectorArt/StartButton.png");
     }
     create() {
         console.log("SceneTitle!");
