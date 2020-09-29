@@ -21,7 +21,7 @@ class SceneLose extends Phaser.Scene {
 
         emitter.on('play_pressed', this.playPressed, this);
 
-        this.loseSound=this.sound.add('lose');
+        this.loseSound=this.sound.add('lose', {volume: 0.3});
         this.played = false;
         
     }
