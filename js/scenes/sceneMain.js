@@ -9,6 +9,14 @@ class SceneMain extends Phaser.Scene {
         this.load.image("background_vector", "images/VectorArt/Background.png");
         this.load.image("sofa", "images/VectorArt/Prop_Sofa.png");
         this.load.image("tv", "images/VectorArt/Prop_TV.png");
+        this.load.image("book", "images/VectorArt/Prop_Book.png");
+        this.load.image("chair", "images/VectorArt/Prop_Chair.png");
+        this.load.image("shirt", "images/VectorArt/Prop_Cloth.png");
+        this.load.image("table", "images/VectorArt/Prop_Table.png");
+        this.load.image("controller", "images/VectorArt/Prop_Controller.png");
+        this.load.image("cup", "images/VectorArt/Prop_Cup.png");
+        this.load.image("lamp", "images/VectorArt/Prop_Lamp.png");
+        this.load.image("keyboard", "images/VectorArt/Prop_Keyboard.png");
         this.load.image("house_vector", "images/VectorArt/House.png");
         this.load.image("character", "images/VectorArt/Character_T.png");
         this.load.image("anger_container", "images/VectorArt/AngerBar_Container.png");
@@ -17,10 +25,21 @@ class SceneMain extends Phaser.Scene {
         this.load.image("money_container", "images/VectorArt/MoneyBar_Container.png");
         this.load.image("money_sign", "images/VectorArt/MoneyBar_DollarSign.png");
         this.load.image("money_block", "images/VectorArt/MoneyBar_Block.png");
+        
+        this.load.image("knife", "images/VectorArt/Fatal_Knife.png");
+        this.load.image("bat", "images/VectorArt/Fatal_Baseball_Bat.png");
+        this.load.image("pan", "images/VectorArt/Fatal_Pan.png");
+        this.load.image("phone", "images/VectorArt/Prop_Phone.png");
+        this.load.image("camera", "images/VectorArt/Prop_Camera.png");
+        this.load.image("cat", "images/VectorArt/Prop_Cat.png");
+        this.load.image("ps4", "images/VectorArt/Prop_PS4.png");
+        this.load.image("diamond", "images/VectorArt/Prop_Diamond.png");
 
-        this.load.image("flower", "images/VectorArt/flower.png")
+        this.load.image("flower", "images/VectorArt/flower.png");
 
-        this.load.image("knife", "images/furniture/knife.png");
+        this.load.spritesheet('smoke', "images/VectorArt/Spritesheet/BrokeAnimation_Spritesheet.png", {frameWidth: 40, frameHeight: 40});
+
+        
 
     }
 
@@ -95,6 +114,21 @@ class SceneMain extends Phaser.Scene {
         this.isNotResting = true;
         this.gameStoped = false;
 
+        this.smoke = this.add.sprite(100 , 100, "smoke");
+        this.anims.create({
+            key: 'break',
+            frames: [
+                {key: 'smoke', frame:0},
+                {key: 'smoke', frame:1},
+                {key: 'smoke', frame:2}
+            ],
+            frameRate: 5,
+            repeat: 0
+        });
+
+        this.smoke.visible = false;
+
+
     }
 
     update() {
@@ -114,10 +148,11 @@ class SceneMain extends Phaser.Scene {
         {
             var msTimeTravel = 3000;
             var randomIdx = Math.floor(Math.random() * 16)
-            var sprites = [ 'sofa', 'tv' , 'knife'];
-            var randItem = this.stageIndx < 8? Math.floor(Math.random() * (sprites.length - 1)) : Math.floor(Math.random() * (sprites.length));
+            var sprites = [ 'sofa', 'tv', 'book', 'chair', 'shirt', 'table', 'cup', 'controller', 'lamp', 'keyboard'];
+            var fiascoModeItems = [ 'camera', 'phone', 'ps4', 'cat', 'diamond' , 'knife', 'bat', 'pan'];
+            var randItem = this.stageIndx < 8? Math.floor(Math.random() * (sprites.length)) : Math.floor(Math.random() * (fiascoModeItems.length));
            //var randItem = Math.floor(Math.random() * (sprites.length));
-            var item = this.physics.add.sprite(this.centerX, this.centerY, sprites[randItem]);
+            var item = this.physics.add.sprite(this.centerX, this.centerY, this.stageIndx < 8? sprites[randItem] : fiascoModeItems[randItem]);
             item.setScale(0.83);
             this.physics.moveTo(item, this.positions[randomIdx].X, this.positions[randomIdx].Y, 1, msTimeTravel );
             this.physics.add.overlap(this.character, item , this.handleCollision, null, this);
@@ -169,8 +204,9 @@ class SceneMain extends Phaser.Scene {
 
     handleCollision(character,item)
     {
+        var isDeadly = item.texture.key == "knife" || item.texture.key == "bat" || item.texture.key == "pan";
 
-        if(item.texture.key != "knife")
+        if(!isDeadly)
         {
             if(this.stageIndx < 8)
             {
@@ -182,7 +218,7 @@ class SceneMain extends Phaser.Scene {
             }
             this.itemsSavedInRound++;
         }
-        else 
+        else
         {
           this.EndGame(false);     
         }
@@ -214,7 +250,9 @@ class SceneMain extends Phaser.Scene {
                 var item = this.items[i];
                 this.items.slice(this.items[i]);
 
-                if(item.texture.key != "knife")
+                var isDeadly = item.texture.key == "knife" || item.texture.key == "bat" || item.texture.key == "pan";
+
+                if(!isDeadly)
                 {
                     emitter.emit(G.DOWN_POINTS, 3);
                     if(model.score < 0)
@@ -223,6 +261,13 @@ class SceneMain extends Phaser.Scene {
                         this.EndGame(false);
                     }
                 }
+
+                this.smoke.x = item.x;
+                this.smoke.y = item.y;
+                this.smoke.visible = true;
+                this.smoke.play('break');
+
+                this.time.addEvent({ delay: 300, callback: this.hideSmoke, callbackScope: this, loop: false });
                 item.destroy();
 
             }
@@ -281,17 +326,25 @@ class SceneMain extends Phaser.Scene {
         }
     }
 
+    //can probably do both of this with one method
     hideFlower()
     {
         this.flower.visible = false;
     }
 
+    hideSmoke()
+    {
+        this.smoke.visible = false;
+    }
+    /*******************/
+
+
     EndGame(playerWin)
     {
         this.gameStoped = true;
-        this.items.forEach((item) => {
-            item.destroy();
-        });
+        // this.items.forEach((item) => {
+        //     item.destroy();
+        // });
 
         //determine which next scene to go to;
 
