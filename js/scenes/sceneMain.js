@@ -35,7 +35,9 @@ class SceneMain extends Phaser.Scene {
         this.load.image("ps4", "images/VectorArt/Prop_PS4.png");
         this.load.image("diamond", "images/VectorArt/Prop_Diamond.png");
 
-        this.load.image("flower", "images/VectorArt/flower.png")
+        this.load.image("flower", "images/VectorArt/flower.png");
+
+        this.load.spritesheet('smoke', "images/VectorArt/Spritesheet/BrokeAnimation_Spritesheet.png", {frameWidth: 40, frameHeight: 40});
 
         
 
@@ -111,6 +113,21 @@ class SceneMain extends Phaser.Scene {
         //this.time.addEvent({ delay: 1000, callback: this.handleGameTime, callbackScope: this, loop: true });
         this.isNotResting = true;
         this.gameStoped = false;
+
+        this.smoke = this.add.sprite(100 , 100, "smoke");
+        this.anims.create({
+            key: 'break',
+            frames: [
+                {key: 'smoke', frame:0},
+                {key: 'smoke', frame:1},
+                {key: 'smoke', frame:2}
+            ],
+            frameRate: 5,
+            repeat: 0
+        });
+
+        this.smoke.visible = false;
+
 
     }
 
@@ -244,6 +261,13 @@ class SceneMain extends Phaser.Scene {
                         this.EndGame(false);
                     }
                 }
+
+                this.smoke.x = item.x;
+                this.smoke.y = item.y;
+                this.smoke.visible = true;
+                this.smoke.play('break');
+
+                this.time.addEvent({ delay: 300, callback: this.hideSmoke, callbackScope: this, loop: false });
                 item.destroy();
 
             }
@@ -302,10 +326,18 @@ class SceneMain extends Phaser.Scene {
         }
     }
 
+    //can probably do both of this with one method
     hideFlower()
     {
         this.flower.visible = false;
     }
+
+    hideSmoke()
+    {
+        this.smoke.visible = false;
+    }
+    /*******************/
+
 
     EndGame(playerWin)
     {
