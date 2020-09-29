@@ -135,10 +135,10 @@ class SceneMain extends Phaser.Scene {
         this.smoke.visible = false;
 
         //sounds
-        this.collectSound=this.sound.add('collect', {volume: 0.3});
-        this.missedSound=this.sound.add('missed', {volume: 0.3});
-        this.throwSound=this.sound.add('throw', {volume: 0.3});
-        this.mainSound=this.sound.add('main', {volume: 0.3});
+        this.collectSound=this.sound.add('collect', {volume: 0.2});
+        this.missedSound=this.sound.add('missed', {volume: 0.2});
+        this.throwSound=this.sound.add('throw', {volume: 0.2});
+        this.mainSound=this.sound.add('main', {volume: 0.2});
         this.mainSound.loop = true;
         this.mainSound.play();
 
