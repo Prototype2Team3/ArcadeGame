@@ -5,7 +5,7 @@ class SceneLose extends Phaser.Scene {
     preload()
     {
         this.load.image("lose_back", "images/VectorArt/Losing_Screen.png");
-        this.load.image("play_btn", "images/VectorArt/button.png");
+        this.load.image("play_btn", "images/VectorArt/AgainButton.png");
         //load sounds
         this.load.audio('lose', 'sounds/LoseScreen.wav');
     }
@@ -17,13 +17,13 @@ class SceneLose extends Phaser.Scene {
         this.background = this.add.image(0,0, 'lose_back');
         this.background.setOrigin(0,0);
 
-        this.startButton = new Button({scene:this, key: 'play_btn', text:'Play AGAIN', x: 400, y: 750, event: 'play_pressed', params: 'play_again'});
+        this.startButton = new Button({scene:this, key: 'play_btn', text:'', x: 400, y: 750, event: 'play_pressed', params: 'play_again'});
 
         emitter.on('play_pressed', this.playPressed, this);
 
         this.loseSound=this.sound.add('lose', {volume: 0.2});
         this.played = false;
-        
+
     }
 
     playPressed()
