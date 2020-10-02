@@ -25,7 +25,6 @@ class SceneTitle extends Phaser.Scene {
     startPressed()
     {
         this.scene.start('SceneMain');
-
     }
 
 
