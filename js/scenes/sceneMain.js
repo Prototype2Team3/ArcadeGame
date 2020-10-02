@@ -5,7 +5,6 @@ class SceneMain extends Phaser.Scene {
     preload()
     {
         //Load Images or Sounds here
-
         this.load.image("background_vector", "images/VectorArt/Background.png");
         this.load.image("sofa", "images/VectorArt/Prop_Sofa.png");
         this.load.image("tv", "images/VectorArt/Prop_TV.png");
@@ -25,7 +24,6 @@ class SceneMain extends Phaser.Scene {
         this.load.image("money_container", "images/VectorArt/MoneyBar_Container.png");
         this.load.image("money_sign", "images/VectorArt/MoneyBar_DollarSign.png");
         this.load.image("money_block", "images/VectorArt/MoneyBar_Block.png");
-
         this.load.image("knife", "images/VectorArt/Fatal_Knife.png");
         this.load.image("bat", "images/VectorArt/Fatal_Baseball_Bat.png");
         this.load.image("pan", "images/VectorArt/Fatal_Pan.png");
@@ -34,9 +32,7 @@ class SceneMain extends Phaser.Scene {
         this.load.image("cat", "images/VectorArt/Prop_Cat.png");
         this.load.image("ps4", "images/VectorArt/Prop_PS4.png");
         this.load.image("diamond", "images/VectorArt/Prop_Diamond.png");
-
         this.load.image("flower", "images/VectorArt/flower.png");
-
         this.load.spritesheet('smoke', "images/VectorArt/Spritesheet/BrokeAnimation_Spritesheet.png", {frameWidth: 40, frameHeight: 40});
         this.load.spritesheet('fiascoMode', "images/VectorArt/Spritesheet/Angry_Indicator_Spritesheet.png", {frameWidth: 800, frameHeight: 800});
         //load sounds
@@ -44,8 +40,6 @@ class SceneMain extends Phaser.Scene {
         this.load.audio('missed', 'sounds/missed.mp3');
         this.load.audio('throw', 'sounds/Throwing.mp3');
         this.load.audio('main', 'sounds/BackgroundMusic.mp3');
-
-
 
     }
 
@@ -66,7 +60,6 @@ class SceneMain extends Phaser.Scene {
         model.moneySigns = 0;
         model.timeElapsed = 0;
 
-
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
         this.start = this.getTime();
@@ -76,7 +69,6 @@ class SceneMain extends Phaser.Scene {
         this.background.setOrigin(0,0);
         this.house = this.add.image(400,400, 'house_vector');
 
-        //this.circle = this.add.image(this.centerX,this.centerY, 'circle');
         //money bar
         this.sb = new ScoreBox({scene:this});
         this.sb.x = 100;
@@ -85,16 +77,8 @@ class SceneMain extends Phaser.Scene {
         this.ab = new AngerBar({scene:this});
         this.ab.x = 400;
         this.ab.y = 700;
-        //level bar
-        // this.lb = new LevelBar({scene:this});
-        // this.lb.x = 600;
-        // this.lb.y = 50;
+
         var sw = false;
-
-        // this.camera.main.zoom = 0.5;
-        // this.camera.main.setScroll =
-
-        //this.time.addEvent({ delay: 500, callback: this.playAnim, callbackScope: this, loop: true });
 
         //grid set up
         var gridConfig={scene:this}
@@ -121,7 +105,6 @@ class SceneMain extends Phaser.Scene {
         this.delayByStage = [2000, 1500, 1250, 1100, 1000, 900, 800, 700, 650];
         this.stageIndx = 0;
         this.itemCreationEvent = this.time.addEvent({ delay: this.delayByStage[this.stageIndx], callback: this.handleItemCreation, callbackScope: this, loop: true });
-        //this.time.addEvent({ delay: 1000, callback: this.handleGameTime, callbackScope: this, loop: true });
         this.isNotResting = true;
         this.gameStoped = false;
 
@@ -152,9 +135,6 @@ class SceneMain extends Phaser.Scene {
 
         this.smoke.visible = false;
 
-
-
-
         //sounds
         this.collectSound=this.sound.add('collect', {volume: 0.2});
         this.missedSound=this.sound.add('missed', {volume: 0.3});
@@ -173,7 +153,6 @@ class SceneMain extends Phaser.Scene {
             this.handlePlayerInput();
             this.handleObjectDestruction();
             this.handleDifficultyLevel();
-            //this.handleScoreIncrease();
         }
     }
 
@@ -186,7 +165,6 @@ class SceneMain extends Phaser.Scene {
             var sprites = [ 'sofa', 'tv', 'book', 'chair', 'shirt', 'table', 'cup', 'controller', 'lamp', 'keyboard'];
             var fiascoModeItems = [ 'camera', 'phone', 'ps4', 'cat', 'diamond' , 'knife', 'bat', 'pan'];
             var randItem = this.stageIndx < 8? Math.floor(Math.random() * (sprites.length)) : Math.floor(Math.random() * (fiascoModeItems.length));
-           //var randItem = Math.floor(Math.random() * (sprites.length));
             var item = this.physics.add.sprite(this.centerX, this.centerY, this.stageIndx < 8? sprites[randItem] : fiascoModeItems[randItem]);
             this.throwSound.play();
             item.setScale(0.83);
@@ -267,16 +245,12 @@ class SceneMain extends Phaser.Scene {
            {
                this.items.slice(this.items[i]);
            }
-
         }
-
        item.disableBody(true, true);
-
     }
 
     handleObjectDestruction()
     {
-
         var r = 300;
         for(var i = 0; i < this.items.length; i++)
         {
@@ -309,12 +283,9 @@ class SceneMain extends Phaser.Scene {
 
                 this.time.addEvent({ delay: 300, callback: this.hideSmoke, callbackScope: this, loop: false });
                 item.destroy();
-
             }
            }
-
         }
-
     }
 
     handleDifficultyLevel()
@@ -324,7 +295,6 @@ class SceneMain extends Phaser.Scene {
             if (this.stageIndx < 8)
             {
                 this.stageIndx++;
-                //this.lb.levelUpdated(this.stageIndx);
                 this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
                 this.itemsSavedInRound = 0;
 
@@ -334,8 +304,6 @@ class SceneMain extends Phaser.Scene {
         //fiasco mode
         if(this.stageIndx == 8)
         {
-            // var sw = false;
-            console.log("fiasco mode");
             this.itemCreationEvent.delay = this.delayByStage[this.stageIndx];
             this.time.addEvent({ delay: 500, callback: this.cameraShaking, callbackScope: this, loop: true });
             if (!this.sw)
@@ -344,13 +312,6 @@ class SceneMain extends Phaser.Scene {
                this.sw = true;
             }
         }
-
-        // if(this.stageIndx == 0)
-        // {
-        //     //console.log("1111");
-        //     //this.time.addEvent({ delay: 100, callback: this.cameraShaking, callbackScope: this, loop: true });
-        //     //this.time.addEvent({ delay: 1000, callback: this.playAnim, callbackScope: this, loop: false });
-        // }
     }
 
     cameraShaking()
@@ -393,7 +354,6 @@ class SceneMain extends Phaser.Scene {
         }
     }
 
-    //can probably do both of this with one method
     hideFlower()
     {
         this.flower.visible = false;
@@ -403,18 +363,11 @@ class SceneMain extends Phaser.Scene {
     {
         this.smoke.visible = false;
     }
-    /*******************/
-
 
     EndGame(playerWin)
     {
         this.gameStoped = true;
-        this.mainSound.stop();
-        // this.items.forEach((item) => {
-        //     item.destroy();
-        // });
-
-        //determine which next scene to go to;
+        this.mainSound.stop()
 
         playerWin? this.scene.start('SceneWin') : this.scene.start('SceneLose');
 

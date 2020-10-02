@@ -24,7 +24,6 @@ class SceneWin extends Phaser.Scene {
     playPressed()
     {
         this.scene.start('SceneMain');
-
     }
 
 
